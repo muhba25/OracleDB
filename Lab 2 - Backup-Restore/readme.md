@@ -24,7 +24,7 @@ ORDER BY created;
 select * from books_admin.persons;
 ```
 
-## BACKUP FULL
+## 2. BACKUP FULL
 ### Create file script backup.sh
 ```
 #!/bin/bash
@@ -80,7 +80,7 @@ EOF
 exit
 ```
 
-## ARCHIVE BACKUP
+## 3. ARCHIVE BACKUP
 ### Create file script backup_arch.sh
 ```
 #!/bin/bash
@@ -134,7 +134,7 @@ EOF
 exit
 ```
 
-## RESTORE
+## 4. RESTORE
 ```
 ---- restore database di standby
 rman target /
@@ -187,7 +187,7 @@ SQL> alter database open resetlogs;
 SQL> ARCHIVE LOG LIST
 ```
 
-## Additional
+## 5. Additional
 ```
 # copy listener, tnsnames dan sqlnet 
 shutdown
