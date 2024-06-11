@@ -1,10 +1,32 @@
-### Cek DATABASE
+# ORACLE DATABASE BACKUP & RESTORE USING RMAN
+## 1. Verify the Database have already installed
+### Check Database status
+```
+SQL> col db_unique_name format a15
+col open_mode format a12
+select dbid, name, db_unique_name, database_role, open_mode, log_mode from v$database;
+
+SQL> set linesize 200
+SELECT instance_name, host_name, version, status, startup_time, archiver, database_status from v$instance;
+
 SQL> set pagesize 999;
 set linesize 999;
 select * from hr.employees;
 
-#### BACKUP
+SQL> set pagesize 999;
+set linesize 999;
+select * from sys.customers;
 
+SQL> set pagesize 999;
+set linesize 999;
+SELECT * FROM all_users
+ORDER BY created;
+select * from books_admin.persons;
+```
+
+## BACKUP FULL
+### Create file script backup.sh
+```
 #!/bin/bash
 
 export ORACLE_SID=metrocomdb
@@ -56,9 +78,11 @@ BACKUP CURRENT CONTROLFILE FORMAT '/backup/metrocomdb/%d_%T_%s_%p_CTLFILE' TAG =
 EOF
 
 exit
+```
 
 ## ARCHIVE BACKUP
-
+### Create file script backup_arch.sh
+```
 #!/bin/bash
 
 export ORACLE_SID=metrocomdb
@@ -108,10 +132,10 @@ RELEASE CHANNEL ch_arc8;
 }
 EOF
 exit
+```
 
-
-### RESTORE
-
+## RESTORE
+```
 ---- restore database di standby
 rman target /
 RMAN> startup nomount force;
@@ -146,21 +170,6 @@ RMAN> report schema;
 RMAN> recover database noredo;
 
 ---- JIKA ONLINE (ARCHIVE LOG AKTIF)
-## dari original host
-rman target /
-RMAN> backup archivelog all format '/backup/rest_of_arc_%U.bks';
-## copy ke new host lalu jalankan pada new host
-RMAN> catalog backuppiece '/backup/rest_of_arc_2o2t1b7v_1_1.bks';
-# SET UNTIL TIME 'Nov 30 2014 09:00:00';  # alternatively, you can specify timje
-# SET UNTIL SCN  966806; # alternatively, you can specify SCN
-# SET UNTIL SEQUENCE 2585; # alternatively, you can specify log sequence number
-RMAN> run {
-SET UNTIL TIME "to_date('11 JUN 2024 12:30:00','DD MON YYYY hh24:mi:ss')";
-recover database;
-}
-
-atau 
-
 RMAN> catalog backuppiece '/backup/arch/METROCOM_20240611_33_1_ARCHIVE';
 RMAN> catalog backuppiece '/backup/arch/METROCOM_20240611_34_1_ARCHIVE';
 Run {
@@ -175,37 +184,19 @@ select * from v$logfile;
 
 SQL> alter database open resetlogs;
 
-SQL> col db_unique_name format a15
-col open_mode format a12
-select dbid, name, db_unique_name, database_role, open_mode, log_mode from v$database;
-
-SQL> set linesize 200
-SELECT instance_name, host_name, version, status, startup_time, archiver, database_status from v$instance;
-
 SQL> ARCHIVE LOG LIST
+```
 
-SQL> set pagesize 999;
-set linesize 999;
-select * from hr.employees;
-
-SQL> set pagesize 999;
-set linesize 999;
-select * from sys.customers;
-
-SQL> set pagesize 999;
-set linesize 999;
-SELECT * FROM all_users
-ORDER BY created;
-select * from books_admin.persons;
-
-
-copy listener, tnsnames dan sqlnet 
+## Additional
+```
+# copy listener, tnsnames dan sqlnet 
 shutdown
 startup
 ---- reset pass sys
 cd $ORACLE_HOME/dbs
 orapwd file=orapwmetrocomdb entries=10
 Enter password for SYS: (MASUKKAN PASSWORD)
-Enter password for SYS: andhykakao123-
+Enter password for SYS: randomize123-
 
-ALTER USER SYS IDENTIFIED BY "andhykakao123-";
+ALTER USER SYS IDENTIFIED BY "randomize123-";
+```
