@@ -171,7 +171,6 @@ RMAN> recover database noredo;
 RMAN> catalog backuppiece '/backup/arch/METROCOM_20240611_33_1_ARCHIVE';
 RMAN> catalog backuppiece '/backup/arch/METROCOM_20240611_34_1_ARCHIVE';
 Run {
-     Set archivelog destination to '/backup/arch/';
     SET UNTIL TIME "to_date('12 JUN 2024 12:30:00','DD MON YYYY hh24:mi:ss')";
 	recover database;
      }
