@@ -19,8 +19,6 @@ select * from sys.customers;
 
 SQL> set pagesize 999;
 set linesize 999;
-SELECT * FROM all_users
-ORDER BY created;
 select * from books_admin.persons;
 ```
 
