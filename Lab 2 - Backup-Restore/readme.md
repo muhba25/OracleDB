@@ -170,7 +170,7 @@ RMAN> recover database noredo;
 ---- JIKA ONLINE (ARCHIVE LOG AKTIF)
 RMAN> catalog backuppiece '/backup/arch/METROCOM_20240611_33_1_ARCHIVE';
 RMAN> catalog backuppiece '/backup/arch/METROCOM_20240611_34_1_ARCHIVE';
-Run {
+RMAN> Run {
     SET UNTIL TIME "to_date('12 JUN 2024 12:30:00','DD MON YYYY hh24:mi:ss')";
 	recover database;
      }
