@@ -189,6 +189,8 @@ SQL> ARCHIVE LOG LIST
 # copy listener, tnsnames dan sqlnet 
 shutdown
 startup
+# atau lgsg ubah lister tanpa restart instance
+alter system local_listener=''=metrocomdb:1521' scope=both;
 ---- reset pass sys
 cd $ORACLE_HOME/dbs
 orapwd file=orapwmetrocomdb entries=10
